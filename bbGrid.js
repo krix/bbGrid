@@ -20,6 +20,7 @@
 //     23.05.2014, Dirk Bunk: Fixed a layout issue for multiselect checkboxes.
 //     04.06.2014, Dirk Bunk: Merged with latest Master. 
 //                            Automatically add 'odd' or 'even' class to subgrid-rows.
+//                            Added a function 'getCellElements' to get all DOM elements of a specific column inside a row.
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
@@ -1267,6 +1268,18 @@
         getSelectedModels: function () {
             var self = this;
             return _.map(this.selectedRows, function (id) { return self.collection.get(id); });
+        },
+        getCellElements: function (row, name) {
+        	var self = this;
+        	var cellElements = [];
+			$.each(self.colModel, function (index) {
+				if (this.name === name) {
+					// If the View includes a Subgrid, the element we look for is a little further right
+					if (self.subgrid) { index += 1; }
+					cellElements.push(self.rowViews[row.cid].el.cells[index]);
+				}
+			});
+			return cellElements;
         }
     });
 
